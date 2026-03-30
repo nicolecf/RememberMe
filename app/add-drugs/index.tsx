@@ -1,37 +1,86 @@
-import { Drug } from '@/data/Drugs';
+import { Drug } from '@/data/Drug';
+import { Button, ButtonGroup, Divider, Input } from '@rneui/themed';
 import React from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const AddDrugs = () => {
-  const [text, onChangeText] = React.useState('Useless Text');
+  const [text, onChangeText] = React.useState('');
   const [number, onChangeNumber] = React.useState('');
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndexes, setSelectedIndexes] = React.useState([0, 2, 3]);
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{
         flex: 1,
         justifyContent: "center",
-        alignItems: "center",
+        padding: 20,
       }}>
         <View>
-          <Text>Nome</Text>
-          <TextInput
-            style={styles.input}
+          <Input
+            label='Nome'
             onChangeText={onChangeText}
             value={text}
+            inputMode='text'
+            placeholder='Nome'
           />
-          <Text>Qunatidade na Caixa</Text>
-          <TextInput
-            style={styles.input}
+          <Input
+            label='Quantidade na Caixa'
             onChangeText={onChangeNumber}
             inputMode='numeric'
             value={number}
-            placeholder="useless placeholder"
+            placeholder="30"
             keyboardType="numeric"
           />
-          <Text>{text}</Text>
+          <Divider style={styles.divider} />
         </View>
+        <View style={{
+          flexDirection: 'row'
+        }}>
+          <Input
+            label="Horário"
+            value="08:00"
+            placeholder='12:00'
+            containerStyle={{
+              flex: 0.4
+            }}
+          />
+          <Input
+            label="Quantidade"
+            value="1"
+            placeholder='1'
+            keyboardType="numeric"
+            inputMode='numeric'
+            containerStyle={{
+              flex: 0.4
+            }}
+          />
+          {/* <Button color="error" size='lg' buttonStyle={{ borderRadius: 200 }} icon={<Icon name="close" color="#FFF" />}/> */}
+        </View>
+        <Divider />
+
+        <ButtonGroup
+          buttons={['Todos os dias', 'Dias da semana']}
+          selectedIndex={selectedIndex}
+          onPress={(value) => {
+            setSelectedIndex(value);
+          }}
+          containerStyle={{
+            marginBottom: 20,
+            marginTop: 20,
+          }}
+        />
+
+        <ButtonGroup
+          buttons={['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab']}
+          selectMultiple
+          selectedIndexes={selectedIndexes}
+          onPress={(value) => {
+            setSelectedIndexes(value);
+          }}
+          containerStyle={{ marginBottom: 20 }}
+        />
         <SaveButton text={text} number={number}/>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -39,11 +88,9 @@ const AddDrugs = () => {
 };
 
 const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
+  divider: {
+    marginTop: 20,
+    marginBottom: 20
   },
 });
 

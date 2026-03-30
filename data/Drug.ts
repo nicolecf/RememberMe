@@ -7,7 +7,7 @@ export class Drug {
 
   constructor(name = '', qtd = 0) {
     this.migrateDbIfNeeded(SQLite.openDatabaseSync('RememberMe'));
-    this.db = await SQLite.openDatabaseAsync('RememberMe');
+    this.db = SQLite.openDatabaseSync('RememberMe');
     this.name = name;
     this.qtd = qtd;
 
@@ -16,13 +16,13 @@ export class Drug {
   async saveDrug(name: string, qtd: number) {
     this.name = name;
     this.qtd = qtd;
-    this.save()
-    // console.log(result.lastInsertRowId);
-    // console.log (await db.getFirstAsync(`SELECT * FROM Drug WHERE id='${result.lastInsertRowId}'`));
+    this.save();
   }
 
   async save() {
-    const result = await this.db.runAsync('INSERT INTO Drug (name, qtd) VALUES (?, ?)', this.name, this.qtd);
+    const result = await this.db.runSync('INSERT INTO Drug (name, qtd) VALUES (?, ?)', this.name, this.qtd);
+    console.log(result);
+
   }
 
   migrateDbIfNeeded(db: SQLite.SQLiteDatabase) {
