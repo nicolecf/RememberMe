@@ -1,3 +1,4 @@
+import TimePicker from '@/components/TimePicker';
 import { Drug } from '@/data/Drug';
 import { Button, ButtonGroup, Divider, Input } from '@rneui/themed';
 import React from 'react';
@@ -7,8 +8,12 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 const AddDrugs = () => {
   const [text, onChangeText] = React.useState('');
   const [number, onChangeNumber] = React.useState('');
+  const [time, setTime] = React.useState('');
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [selectedIndexes, setSelectedIndexes] = React.useState([0, 2, 3]);
+  const [show, setShow] = React.useState(false);
+  const [showWeekDays, setShowWeekDays] = React.useState(false);
+
 
   return (
     <SafeAreaProvider>
@@ -40,11 +45,13 @@ const AddDrugs = () => {
         }}>
           <Input
             label="Horário"
-            value="08:00"
+            value={time}
             placeholder='12:00'
             containerStyle={{
               flex: 0.4
             }}
+            onFocus={() => setShow(true)}
+            onBlur={() => setShow(false)}
           />
           <Input
             label="Quantidade"
@@ -59,28 +66,32 @@ const AddDrugs = () => {
           {/* <Button color="error" size='lg' buttonStyle={{ borderRadius: 200 }} icon={<Icon name="close" color="#FFF" />}/> */}
         </View>
         <Divider />
-
+        <TimePicker showTimer={show} callBack={(selectedDate:Date) => {
+          setTime(`${selectedDate.getHours()}:${selectedDate.getMinutes()}`);
+        }} />
         <ButtonGroup
           buttons={['Todos os dias', 'Dias da semana']}
           selectedIndex={selectedIndex}
           onPress={(value) => {
             setSelectedIndex(value);
+            setShowWeekDays(value === 1);
           }}
           containerStyle={{
             marginBottom: 20,
             marginTop: 20,
           }}
         />
-
-        <ButtonGroup
-          buttons={['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab']}
-          selectMultiple
-          selectedIndexes={selectedIndexes}
-          onPress={(value) => {
-            setSelectedIndexes(value);
-          }}
-          containerStyle={{ marginBottom: 20 }}
-        />
+        {(showWeekDays) && (
+          <ButtonGroup
+            buttons={['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab']}
+            selectMultiple
+            selectedIndexes={selectedIndexes}
+            onPress={(value) => {
+              setSelectedIndexes(value);
+            }}
+            containerStyle={{ marginBottom: 20 }}
+          />
+        )}
         <SaveButton text={text} number={number}/>
       </SafeAreaView>
     </SafeAreaProvider>
