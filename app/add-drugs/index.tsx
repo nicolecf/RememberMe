@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
 
 export default AddDrugs;
 
-
 export function SaveButton({text, number}) {
   return (
     <View>

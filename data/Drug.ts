@@ -3,6 +3,11 @@ import * as SQLite from 'expo-sqlite';
 export class Drug {
   name: string;
   qtd: number;
+  boxQtd: number;
+  id: number;
+  time: string;
+  config: string;
+
   db: SQLite.SQLiteDatabase;
 
   constructor(name = '', qtd = 0) {
@@ -36,7 +41,7 @@ export class Drug {
     if (currentDbVersion === 0) {
       db.execSync(`
         PRAGMA journal_mode = 'wal';
-        CREATE TABLE Drug (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, qtd INTEGER);
+        CREATE TABLE Drug (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, qtd INTEGER, boxQtd INTEGER NOT NULL, time TEXT, config TEXT);
       `);
     }
     db.execSync(`PRAGMA user_version = ${DATABASE_VERSION}`);
