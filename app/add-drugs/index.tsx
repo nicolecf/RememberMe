@@ -5,9 +5,12 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
+const _daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+const _weekConfig = ['allWeek', 'weekDays'];
+
 const AddDrugs = () => {
-  const [text, onChangeText] = React.useState('');
-  const [number, onChangeNumber] = React.useState('');
+  const [name, onChangeText] = React.useState('');
+  const [qtdBox, onChangeNumber] = React.useState('30');
   const [time, setTime] = React.useState('');
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [selectedIndexes, setSelectedIndexes] = React.useState([0, 2, 3]);
@@ -26,7 +29,7 @@ const AddDrugs = () => {
           <Input
             label='Nome'
             onChangeText={onChangeText}
-            value={text}
+            value={name}
             inputMode='text'
             placeholder='Nome'
           />
@@ -34,7 +37,7 @@ const AddDrugs = () => {
             label='Quantidade na Caixa'
             onChangeText={onChangeNumber}
             inputMode='numeric'
-            value={number}
+            value={qtdBox}
             placeholder="30"
             keyboardType="numeric"
           />
@@ -92,7 +95,7 @@ const AddDrugs = () => {
             containerStyle={{ marginBottom: 20 }}
           />
         )}
-        <SaveButton text={text} number={number}/>
+        <SaveButton name={name} qtdBox={qtdBox} time={time} timeOfWeek={selectedIndex} daysOfWeek={selectedIndexes}/>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -107,19 +110,27 @@ const styles = StyleSheet.create({
 
 export default AddDrugs;
 
-export function SaveButton({text, number}) {
+export function SaveButton({name = '', qtdBox = 30, time = '', timeOfWeek = 0, daysOfWeek = []}) {
   return (
     <View>
       <Button title='Adicionar' onPress={
         () => {
-          saveDrug(text, number)
+
+          let configJSON = {
+            daysOfWeek: [],
+            timeOfWeek: ''
+          };
+
+          configJSON.daysOfWeek = daysOfWeek.map((item) => {
+            return _daysOfWeek[item]
+          });
+
+          configJSON.timeOfWeek = _weekConfig[timeOfWeek];
+
+          const drug = new Drug(name, qtdBox, qtdBox, time , JSON.stringify(configJSON));
+          drug.save();
         }
       }/>
     </View>
   );
-}
-
-async function saveDrug(text: string, number: number) {
-  const drug = new Drug(text, number);
-  drug.save();
 }

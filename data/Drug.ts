@@ -1,6 +1,8 @@
 import * as SQLite from 'expo-sqlite';
+import DrugItem from './DrugItem';
 
 export class Drug {
+
   name: string;
   qtd: number;
   boxQtd: number;
@@ -10,24 +12,32 @@ export class Drug {
 
   db: SQLite.SQLiteDatabase;
 
-  constructor(name = '', qtd = 0) {
-    this.migrateDbIfNeeded(SQLite.openDatabaseSync('RememberMe'));
-    this.db = SQLite.openDatabaseSync('RememberMe');
+  constructor();
+  constructor(name = '', qtd = 0, boxQtd = 0, time = '', config = '') {
+    this.migrateDbIfNeeded(SQLite.openDatabaseSync('RememberMe.db'));
+    this.db = SQLite.openDatabaseSync('RememberMe.db');
     this.name = name;
     this.qtd = qtd;
-
+    this.boxQtd = boxQtd;
+    this.time = time;
+    this.config = config;
   }
 
-  async saveDrug(name: string, qtd: number) {
+
+  async saveDrug(name: string, qtd: number, boxQtd: number, time: string, config:string) {
     this.name = name;
     this.qtd = qtd;
     this.save();
   }
 
   async save() {
-    const result = await this.db.runSync('INSERT INTO Drug (name, qtd) VALUES (?, ?)', this.name, this.qtd);
-    console.log(result);
+    const result = await this.db.runSync('INSERT INTO Drug (name, qtd, boxQtd, time, config) VALUES (?, ?, ?, ?, ?)', this.name, this.qtd, this.qtd, this.time, this.config);
+    const allRows = await this.db.getAllAsync('SELECT * FROM Drug');
+  }
 
+  async getAll():Promise<DrugItem[]> {
+    const allRows :DrugItem[] = await this.db.getAllAsync('SELECT * FROM Drug');
+    return allRows;
   }
 
   migrateDbIfNeeded(db: SQLite.SQLiteDatabase) {

@@ -11,12 +11,19 @@ export default function RootLayout() {
         }}
       />
     <Drawer.Screen
+      name="all-drugs/index" // This is the name of the page and must match the url from root
+      options={{
+        drawerLabel: 'Remedios',
+        title: 'Remédios',
+      }}
+    />
+    <Drawer.Screen
         name="add-drugs/index" // This is the name of the page and must match the url from root
         options={{
           drawerLabel: 'Remédio',
           title: 'overview',
         }}
       />
-  </Drawer>  
+  </Drawer>
   )
 }
