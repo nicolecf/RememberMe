@@ -40,6 +40,13 @@ export class Drug {
     return allRows;
   }
 
+  async remove(id:number):Promise<boolean> {
+    const result = this.db.runSync('DELETE FROM Drug WHERE id = $id', { $id: id });
+    console.log(result);
+
+    return true
+  }
+
   migrateDbIfNeeded(db: SQLite.SQLiteDatabase) {
     const DATABASE_VERSION = 1;
     let { user_version: currentDbVersion } = db.getFirstSync<{ user_version: number }>(

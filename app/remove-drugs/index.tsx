@@ -6,9 +6,10 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-const AllDrugs = () => {
+const RemoveDrugs = () => {
   const drugs = new DrugData();
   const [drugItems, setDrugItems] = React.useState<DrugItem[]>([]);
+  const [isUpdated, setIsUpdated] = React.useState<boolean>(true);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -17,6 +18,7 @@ const AllDrugs = () => {
         setDrugItems(result);
       }
       setup();
+
     }, [])
   );
 
@@ -31,7 +33,11 @@ const AllDrugs = () => {
           {drugItems.map((drug, index) => {
             const isDelayed = drug.time < new Date().getHours() + ':' + new Date().getMinutes();
             return (
-            <Drug name={drug.name} hour={drug.time}  key={index} isDelayed={isDelayed} isTaken={true}/>
+            <Drug name={drug.name} hour={drug.time} key={index} isDelayed={isDelayed} isTaken={true} type='delete' callback={async (event)=> {
+              drugs.remove(drug.id);
+              const result = await drugs.getAll();
+              setDrugItems(result);
+            }}/>
           )})}
         </ScrollView>
       </SafeAreaView>
@@ -39,4 +45,4 @@ const AllDrugs = () => {
   );
 }
 
-export default AllDrugs;
+export default RemoveDrugs;
