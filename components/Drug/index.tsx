@@ -35,7 +35,14 @@ export default function Drug ({
       <Icon name="medication" color="#FFF" containerStyle={styles.icon}/>
       <View style={styles.textContainer}>
         <Text h4={true}> {name} </Text>
-        <Text> {hour} </Text>
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingLeft: 5
+          }}>
+          <Icon name="schedule" color="#3e3e3e" iconStyle={styles.iconText}/>
+          <Text> {hour} </Text>
+        </View>
       </View>
       {(type === "check") && (
         <Switch
@@ -60,6 +67,9 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     padding: 15
+  },
+  iconText: {
+    fontSize: 15,
   },
   textContainer: {
     flex: 1,

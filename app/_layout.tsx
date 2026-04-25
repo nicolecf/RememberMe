@@ -14,7 +14,7 @@ export default function RootLayout() {
       name="all-drugs/index"
       options={{
         drawerLabel: 'Remedios',
-        title: 'Remédios',
+        title: 'Remédioss',
       }}
     />
     <Drawer.Screen

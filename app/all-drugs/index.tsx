@@ -1,7 +1,8 @@
 import Drug from '@/components/Drug';
 import { Drug as DrugData } from '@/data/Drug';
 import DrugItem from '@/data/DrugItem';
-import { useFocusEffect } from 'expo-router';
+import { FAB } from '@rneui/themed';
+import { useFocusEffect, useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +10,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 const AllDrugs = () => {
   const drugs = new DrugData();
   const [drugItems, setDrugItems] = React.useState<DrugItem[]>([]);
+  const router = useRouter();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -34,6 +36,13 @@ const AllDrugs = () => {
             <Drug name={drug.name} hour={drug.time}  key={index} isDelayed={isDelayed} isTaken={true}/>
           )})}
         </ScrollView>
+        <FAB
+          title="Novo Remédio"
+          placement='right'
+          icon={{ name: 'add', color: 'white' }}
+          color='#009688' onPress={()=>{
+          router.push('/add-drugs');
+        }}/>
       </SafeAreaView>
     </SafeAreaProvider>
   );
